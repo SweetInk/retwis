@@ -1,6 +1,7 @@
 package online.githuboy.retwis.service.impl;
 
 import online.githuboy.retwis.common.RetwisException;
+import online.githuboy.retwis.domain.FFCounter;
 import online.githuboy.retwis.domain.User;
 import online.githuboy.retwis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Redis based  UserService implementation
@@ -41,6 +44,26 @@ public class RedisUserServiceImpl implements UserService {
     }
 
     @Override
+    public User queryByUName(String username) {
+        HashOperations<String, String, String> hashOperations = template.opsForHash();
+        String userId = hashOperations.get("retwis:users", username);
+        if (StringUtils.isEmpty(userId)) {
+            throw new RetwisException("The username or password incorrect");
+        }
+        return User.builder().userId(userId).userName(username).build();
+    }
+
+    @Override
+    public User queryById(String userId) {
+        HashOperations<String, String, String> hashOperations = template.opsForHash();
+        String username = hashOperations.get("retwis:user:" + userId, "username");
+        if (StringUtils.isEmpty(userId)) {
+            throw new RetwisException("The username or password incorrect");
+        }
+        return User.builder().userId(userId).userName(username).build();
+    }
+
+    @Override
     public User register(String username, String password) {
         HashOperations<String, String, String> hashOperations = template.opsForHash();
         ListOperations<String, String> listOperations = template.opsForList();
@@ -55,7 +78,21 @@ public class RedisUserServiceImpl implements UserService {
         dataMap.put("password", password);
         hashOperations.put("retwis:users", username, userId + "");
         hashOperations.putAll("retwis:user:" + userId, dataMap);
+        template.opsForZSet().add("retwis:users_by_time", username, new Date().getTime());
         return User.builder().userId(String.valueOf(userId)).userName(username).build();
+    }
 
+    @Override
+    public Set<String> queryLastUsers() {
+        Set<String> strings = template.opsForZSet().reverseRange("retwis:users_by_time", 0, 9);
+        return strings;
+    }
+
+    @Override
+    public FFCounter countFF(String userId) {
+        FFCounter counter = new FFCounter();
+        counter.setFollowing(template.opsForZSet().zCard("retwis:following:" + userId));
+        counter.setFollowers(template.opsForZSet().zCard("retwis:followers:" + userId));
+        return counter;
     }
 }

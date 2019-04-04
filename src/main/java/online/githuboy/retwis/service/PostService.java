@@ -10,7 +10,20 @@ import java.util.List;
  */
 public interface PostService {
 
+    /**
+     * Post the content
+     * @param userId user id
+     * @param userName user name;
+     * @param content content
+     */
     void post(String userId, String userName, String content);
 
+    /**
+     * Query post list with pagination
+     * @param userId user id
+     * @param start startIndex
+     * @param end endIndex
+     * @return post list;
+     */
     List<Post> recentlyPosts(String userId, Integer start, Integer end);
 }

@@ -31,6 +31,7 @@ public class RedisPostServiceImpl implements PostService {
         template.opsForHash().putAll("retwis:post:" + nextPostId, dataMap);
         List<String> result = template.opsForList().range("retwis:followers:" + userId, 0, -1);
         assert result != null;
+        result.add(userId);
         result.forEach(uid -> {
             template.opsForList().leftPush("retwis:posts:" + uid, nextPostId + "");
         });

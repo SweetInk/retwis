@@ -3,9 +3,8 @@ package online.githuboy.retwis.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
+ * Post pojo
  * @author suchu
  * @since 2019/4/4 9:50
  */

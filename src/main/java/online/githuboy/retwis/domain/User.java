@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
+ * the user pojo
+ *
  * @author suchu
  * @since 2019/3/23 13:49
  */

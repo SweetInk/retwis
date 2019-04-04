@@ -5,18 +5,20 @@
 <head>
     <link type="text/css" href="/css/style.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>timeline page</title>
+    <title>profile page</title>
 </head>
 <body>
 <div id="page">
     <div th:replace="/header"></div>
-    <h2>Timeline</h2>
-    <i>Latest registered users (an example of sorted sets)</i><br>
-    <div th:each="u:${users}">
-        <a class="username" th:href="'/profile.html?u='+${u}" th:text="${u}"></a>
+    <h2 class="username" th:text="${#request.getParameter('u')}"></h2>
+    <div th:if="${show_follow}">
+        <a th:if="${followed == false}" th:href="'/user/follow?uid='+${ru.userId}" th:text="'Follow this user'"
+           class="button">
+            Follow this user
+        </a>
+        <a th:if="${followed==true}" th:href="'/user/unfollow?uid='+${ru.userId}" th:text="'Stop following'"
+           class="button">Stop following</a>
     </div>
-    <br>
-    <i>Latest 50 messages from users aroud the world!</i><br>
     <div class="post" th:each="p:${posts}">
         <a class="username" th:href="'/profile.html?u=' +${p.userName}" th:text="${p.userName}"></a>
         <p th:text="${p.content}"></p>

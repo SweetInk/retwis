@@ -26,10 +26,10 @@
         <div>
             <span th:text="${posts}"></span>
         </div>
-        <!--<div id="homeinfobox">
-            <?=$r->zcard("followers:".$User['id'])?> followers<br>
-            <?=$r->zcard("following:".$User['id'])?> following<br>
-        </div>-->
+        <div id="homeinfobox">
+            <span th:text="${counter.followers} +' followers'"></span><br>
+            <span th:text="${counter.following} +' following'"></span>
+        </div>
     </div>
     <div th:replace="/footer"></div>
 </div>
