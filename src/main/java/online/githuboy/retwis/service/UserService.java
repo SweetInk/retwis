@@ -1,5 +1,7 @@
 package online.githuboy.retwis.service;
 
+import online.githuboy.retwis.domain.User;
+
 /**
  * UserService
  *
@@ -7,7 +9,7 @@ package online.githuboy.retwis.service;
  * @since 2019/3/23 9:12
  */
 public interface UserService {
-    void login(String username, String pwd);
+    User login(String username, String pwd);
 
-    void register(String username, String pwd);
+    User register(String username, String pwd);
 }

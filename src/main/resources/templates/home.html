@@ -1,0 +1,37 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link type="text/css" href="/css/style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Home page</title>
+</head>
+<body>
+<div id="page">
+    <div th:replace="/header"></div>
+    <div id="postform">
+        <form method="POST" action="/post/">
+            <span th:text="${session.user}"></span>, what you are doing?
+            <br>
+            <table>
+                <tr>
+                    <td><textarea cols="70" rows="3" name="content"></textarea></td>
+                </tr>
+                <tr>
+                    <td align="right"><input type="submit" name="doit" value="Update"></td>
+                </tr>
+            </table>
+        </form>
+        <div>
+            <span th:text="${posts}"></span>
+        </div>
+        <!--<div id="homeinfobox">
+            <?=$r->zcard("followers:".$User['id'])?> followers<br>
+            <?=$r->zcard("following:".$User['id'])?> following<br>
+        </div>-->
+    </div>
+    <div th:replace="/footer"></div>
+</div>
+</body>
+</html>

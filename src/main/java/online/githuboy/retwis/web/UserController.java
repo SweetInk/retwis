@@ -1,13 +1,16 @@
 package online.githuboy.retwis.web;
 
+import online.githuboy.retwis.domain.User;
 import online.githuboy.retwis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
 /**
  * @author suchu
@@ -20,29 +23,41 @@ public class UserController {
     @Autowired
     StringRedisTemplate template;
 
-    private HashOperations<String, String, String> hashOperations = template.opsForHash();
-    private ListOperations<String, String> listOperations = template.opsForList();
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     @Autowired
     UserService userService;
 
     @RequestMapping("/login")
-    public String login(String user, String pwd, Model model) {
+    public String login(String username, String password, Model model, HttpSession session) {
         try {
-            userService.login(user, pwd);
+            User user = userService.login(username, password);
+            session.setAttribute("user", user);
+            return "redirect:/home.html";
+
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
+            e.printStackTrace();
+            return "index";
         }
 
-        return "index";
+    }
+
+    static class TUser implements Serializable {
+        public Integer a;
+        public String b;
     }
 
     @RequestMapping("/register")
-    public String register(String username, String password, Model model) {
+    public String register(String username, String password, Model model, HttpSession session) {
         try {
-            userService.register(username, password);
+            User user = userService.register(username, password);
+            session.setAttribute("user", user);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
+            e.printStackTrace();
         }
         return "index";
     }

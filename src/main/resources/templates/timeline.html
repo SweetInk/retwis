@@ -1,0 +1,24 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link type="text/css" href="/css/style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>timeline page</title>
+</head>
+<body>
+<div id="page">
+    <div th:replace="/header"></div>
+    <h2>Timeline</h2>
+    <i>Latest registered users (an example of sorted sets)</i><br>
+    <i>Latest 50 messages from users aroud the world!</i><br>
+    <div class="post" th:each="p:${posts}">
+        <a class="username" href="/profile.html?u=" th:text="${p.userName}"></a>
+        <p th:text="${p.content}"></p>
+        <i th:text="'posted '+ ${p.time}+' ago via web'"></i>
+    </div>
+    <div th:replace="/footer"></div>
+</div>
+</body>
+</html>

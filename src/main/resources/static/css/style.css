@@ -1,6 +1,6 @@
 BODY {
     font-family: Verdana, sans-serif;
-    background: url(/background.png) repeat-x top white;
+    /*background: url(/css/background.png) repeat-x top white;*/
     background-attachment: fixed;
 }
 
